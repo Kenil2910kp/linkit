@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkIt - Link Management App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="loginForm" class="auth-form">
+                <h2>Login</h2>
+                <form id="loginFormElement">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
+            </div>
+            <div id="signupForm" class="auth-form" style="display: none;">
+                <h2>Sign Up</h2>
+                <form id="signupFormElement">
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                    <input type="password" id="signupPassword" placeholder="Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (shown after login) -->
+    <div id="mainApp" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>LinkIt</h1>
+            </div>
+            <div class="nav-actions">
+                <div class="api-key-section">
+                    <button id="apiKeyBtn" class="btn-secondary">API Keys</button>
+                    <div id="apiKeyDropdown" class="dropdown-content" style="display: none;">
+                        <div class="dropdown-header">
+                            <h3>API Keys</h3>
+                            <button id="generateApiKeyBtn" class="btn-primary-small">Generate New</button>
+                        </div>
+                        <div id="apiKeysList"></div>
+                        <div id="apiKeyForm" style="display: none;">
+                            <input type="text" id="apiKeyName" placeholder="API Key Name" required>
+                            <button id="createApiKeyBtn" class="btn-primary-small">Create</button>
+                            <button id="cancelApiKeyBtn" class="btn-secondary-small">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <div class="app-container">
+            <!-- Collections Sidebar -->
+            <aside class="sidebar">
+                <!-- Favorites Section -->
+                <div class="favorites-section">
+                    <div class="favorites-header">
+                        <h2>⭐ Favorites</h2>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="favorites-count" id="favoritesCount">0</span>
+                            <button id="addFavoriteLinkBtn" class="btn-icon" title="Add to Favorites" style="width: 28px; height: 28px; font-size: 1rem;">+</button>
+                        </div>
+                    </div>
+                    <div id="favoritesList" class="favorites-list"></div>
+                </div>
+
+                <!-- Collections Section -->
+                <div class="collections-section">
+                    <div class="sidebar-header">
+                        <h2>Collections</h2>
+                        <button id="addCollectionBtn" class="btn-icon" title="Add Collection">+</button>
+                    </div>
+                    <div id="collectionsList" class="collections-list"></div>
+                    <div id="collectionForm" class="collection-form" style="display: none;">
+                        <input type="text" id="collectionNameInput" placeholder="Collection Name" required>
+                        <div class="form-actions">
+                            <button id="saveCollectionBtn" class="btn-primary-small">Save</button>
+                            <button id="cancelCollectionBtn" class="btn-secondary-small">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div id="emptyState" class="empty-state">
+                    <h2>Welcome to LinkIt!</h2>
+                    <p>Create a collection to get started, or select an existing collection to manage links.</p>
+                </div>
+
+                <div id="collectionView" style="display: none;">
+                    <div class="content-header">
+                        <h2 id="collectionTitle">Collection Name</h2>
+                        <div class="search-bar">
+                            <input type="text" id="searchInput" placeholder="Search links by title...">
+                            <button id="searchBtn" class="btn-icon">🔍</button>
+                        </div>
+                    </div>
+                    <div class="content-actions">
+                        <button id="addLinkBtn" class="btn-primary">+ Add Link</button>
+                    </div>
+                    <div id="linksList" class="links-list"></div>
+                </div>
+
+                <!-- Add/Edit Link Modal -->
+                <div id="linkModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h2 id="linkModalTitle">Add Link</h2>
+                        <form id="linkForm">
+                            <input type="text" id="linkTitle" placeholder="Link Title" required>
+                            <input type="url" id="linkUrl" placeholder="Link URL (https://...)" required>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save</button>
+                                <button type="button" id="addToFavoritesBtn" class="btn-secondary">⭐ Add to Favorites</button>
+                                <button type="button" id="cancelLinkBtn" class="btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Add to Favorites Modal -->
+                <div id="favoriteLinkModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" id="closeFavoriteModal">&times;</span>
+                        <h2>⭐ Add to Favorites</h2>
+                        <form id="favoriteLinkForm">
+                            <input type="text" id="favoriteLinkTitle" placeholder="Link Title" required>
+                            <input type="url" id="favoriteLinkUrl" placeholder="Link URL (https://...)" required>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">⭐ Add to Favorites</button>
+                                <button type="button" id="cancelFavoriteLinkBtn" class="btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- API Key Display Modal -->
+    <div id="apiKeyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeApiKeyModal">&times;</span>
+            <h2>API Key Created</h2>
+            <div class="api-key-display">
+                <div class="api-key-display-name">
+                    <label>Name:</label>
+                    <span id="apiKeyDisplayName"></span>
+                </div>
+                <div class="api-key-display-key">
+                    <label>Your API Key:</label>
+                    <div class="api-key-value-display">
+                        <code id="apiKeyDisplayValue"></code>
+                    </div>
+                    <p class="api-key-warning">⚠️ This key will only be shown once. Make sure to copy it now.</p>
+                </div>
+                <button id="copyApiKeyModalBtn" class="btn-primary copy-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

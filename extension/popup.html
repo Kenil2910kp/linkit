@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linkit</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">
+      <h1>Linkit</h1>
+    </div>
+    <div class="header-actions">
+      <button id="saveAllBtn" class="btn-secondary">Save All</button>
+    </div>
+  </div>
+
+  <!-- Current Page Info -->
+  <div class="current-page" id="currentPageInfo">
+    <div class="current-page-title" id="currentPageTitle">Loading...</div>
+    <div class="current-page-url" id="currentPageUrl">Loading...</div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-view="favorites">Favorites</button>
+    <button class="nav-tab" data-view="collections">Collections</button>
+  </div>
+
+  <!-- API Key Setup (shown when no API key) -->
+  <div class="api-key-setup" id="apiKeySetup" style="display: none;">
+    <div class="api-key-content">
+      <h2>Enter API Key</h2>
+      <p>Please enter your API key to continue</p>
+      <input type="text" id="apiKeyInput" placeholder="Enter API key" class="api-key-input">
+      <button id="saveApiKeyBtn" class="btn-primary">Save API Key</button>
+      <div class="error-message" id="apiKeyError"></div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" id="errorState" style="display: none;">
+    <div class="error-content">
+      <p id="errorMessage"></p>
+      <button id="retryBtn" class="btn-primary">Retry</button>
+      <button id="resetApiKeyBtn" class="btn-secondary">Re-enter API Key</button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" id="loadingState" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search favorites..." class="search-input">
+    </div>
+
+    <!-- Favorites View -->
+    <div class="view-content" id="favoritesView">
+      <div class="add-button-container">
+        <button id="addToFavoritesBtn" class="btn-add">
+          + Add Current Tab to Favorites
+        </button>
+      </div>
+      <div class="links-list" id="favoritesList">
+        <!-- Favorites will be rendered here -->
+      </div>
+    </div>
+
+    <!-- Collections View -->
+    <div class="view-content" id="collectionsView" style="display: none;">
+      <div class="collections-list" id="collectionsList">
+        <!-- Collections will be rendered here -->
+      </div>
+    </div>
+
+    <!-- Collection Detail View -->
+    <div class="view-content" id="collectionDetailView" style="display: none;">
+      <div class="collection-header">
+        <button id="backToCollectionsBtn" class="btn-back">← Back</button>
+        <div class="collection-info">
+          <h2 id="collectionDetailName"></h2>
+          <div class="collection-meta">
+            <span id="collectionDetailDate"></span>
+            <span id="collectionDetailCount"></span>
+          </div>
+        </div>
+        <button id="refreshCollectionBtn" class="btn-refresh" title="Refresh">↻</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="collectionSearchInput" placeholder="Search collections..." class="search-input">
+      </div>
+      <div class="add-button-container">
+        <button id="addToCollectionBtn" class="btn-add">
+          + Add Current Tab
+        </button>
+      </div>
+      <div class="links-list" id="collectionLinksList">
+        <!-- Collection links will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
+
