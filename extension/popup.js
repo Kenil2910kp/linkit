@@ -169,8 +169,6 @@ async function loadData() {
         return null;
       })
     ]);
-    console.log('RAW favorites response:', favoritesRes);
-console.log('RAW collections response:', collectionsRes);
 
 
 state.setFavorites(

@@ -9,5 +9,7 @@ router.get('/me', authMiddleware, (req, res) => {
       user: req.user
     });
 });
+router.post('/verify-email', authController.verifyEmail);
+
   
 module.exports = router;

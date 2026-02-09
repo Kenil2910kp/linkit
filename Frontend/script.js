@@ -51,7 +51,6 @@ async function checkAuthStatus() {
       showAuthModal();
     }
   }
-  
 
 // Initialize App
 function initializeApp() {
@@ -446,6 +445,7 @@ async function loadCollections() {
                 'Content-Type': 'application/json'
             }
         });
+        console.log(response.json);
         const data = await response.json();
         collections = data;
 
@@ -917,7 +917,6 @@ async function loadFavoriteLinks() {
             const dateB = new Date(b.createdAt);
             return dateB - dateA; // DESC order
         });
-        console.log(favoriteLinks);
         
         renderFavorites();
     } catch (error) {

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Verification</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6c63ff, #4e54c8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .message {
+      margin: 15px 0;
+      font-size: 15px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #6c63ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #4e54c8;
+    }
+
+    .loader {
+      margin: 15px 0;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Email Verification</h2>
+    <div id="status" class="loader">Verifying your email...</div>
+    <div id="action"></div>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:8011";
+
+    const statusEl = document.getElementById("status");
+    const actionEl = document.getElementById("action");
+
+    async function verifyEmail() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+
+      if (!token) {
+        statusEl.className = "message error";
+        statusEl.textContent = "Invalid verification link.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          statusEl.className = "message success";
+          statusEl.textContent = data.message || "Email verified successfully!";
+
+          actionEl.innerHTML = `
+            <a href="/" class="btn">Go to Login</a>
+          `;
+        } else {
+          statusEl.className = "message error";
+          statusEl.textContent = data.error || "Verification failed.";
+        }
+
+      } catch (error) {
+        statusEl.className = "message error";
+        statusEl.textContent = "Something went wrong. Please try again.";
+        console.error(error);
+      }
+    }
+
+    verifyEmail();
+  </script>
+
+</body>
+</html>

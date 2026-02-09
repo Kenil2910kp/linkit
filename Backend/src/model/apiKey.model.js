@@ -7,7 +7,6 @@ const apiKeySchema = new mongoose.Schema(
       required: true
     },
 
-    // 🔑 prefix for fast lookup (indexed)
     keyPrefix: {
       type: String,
       required: true,
@@ -15,7 +14,6 @@ const apiKeySchema = new mongoose.Schema(
       index: true
     },
 
-    // 🔒 bcrypt hash of the secret part only
     keyHash: {
       type: String,
       required: true
@@ -41,7 +39,6 @@ const apiKeySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// compound index for common queries
 apiKeySchema.index({ userId: 1, revoked: 1 });
 
 module.exports = mongoose.model('ApiKey', apiKeySchema);

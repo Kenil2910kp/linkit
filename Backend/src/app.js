@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
+
 
 const authRoutes = require('./routes/auth.routes');
 const collectionRoutes = require('./routes/collection.routes');
@@ -16,12 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRoutes);
-app.use('/collections', collectionRoutes);
-// app.use('/api-keys', apiKeyRoutes);
 app.use('/links', linkRoutes);
 app.use('/api-keys', apiKeyRoutes);
 app.use('/extension',extensionRoutes);
 app.use('/favorites',favoriteRoutes);
+app.use('/collections',collectionRoutes);
 
 
 app.get('/health', (req, res) => {

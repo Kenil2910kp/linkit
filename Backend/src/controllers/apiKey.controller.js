@@ -11,11 +11,9 @@ exports.createApiKey = async (req, res) => {
       if (!name) {
         return res.status(400).json({ error: 'Name required' });
       }
-  
-      // 🔑 generate prefix + secret
+
       const { fullKey, prefix, secret } = generateApiKey();
-  
-      // 🔒 hash ONLY the secret
+      
       const keyHash = await bycrypt.hash(secret, 12);
   
       const apiKey = await ApiKey.create({

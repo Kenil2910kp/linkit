@@ -32,7 +32,6 @@ exports.addCurrentTab = async (req, res) => {
   res.json(link);
 };
 
-
 exports.getCollections = async (req, res) => {
     const userId = req.userId;
   
@@ -51,11 +50,7 @@ exports.getCollections = async (req, res) => {
       }))
     );
   };
-  
-  /**
-   * POST /extension/collections/:collectionId/links
-   * Add current tab to a collection
-   */
+
   exports.addLinkToCollection = async (req, res) => {
     const userId = req.userId;
     const { collectionId } = req.params;
