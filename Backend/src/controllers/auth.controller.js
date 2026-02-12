@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
     expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 min
   });
 
-  const verifyUrl = `http://localhost:5500/email-verify?token=${rawToken}`;
+  const verifyUrl = `http://localhost:5500/email-verify.html?token=${rawToken}`;
   console.log('📨 Sending verification email to:',email);
 
   await sendEmail.sendMail({

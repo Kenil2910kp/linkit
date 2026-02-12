@@ -72,6 +72,7 @@ exports.getCollections = async (req, res) => {
     }
   
     const link = await Link.create({
+      userId,
       collectionId,
       title,
       url
