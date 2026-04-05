@@ -333,7 +333,7 @@ const BOTTOM_NAV = [
     { key: 'saved', label: 'Saved Collections', icon: <Icons.Bookmark /> },
     { key: 'tools', label: 'Tools & Agents', icon: <Icons.Tool /> },
     { key: 'subscription', label: 'Manage Subscription', icon: <Icons.Crown /> },
-    { key: 'settings', label: 'Settings', icon: <Icons.Settings /> },
+    // { key: 'settings', label: 'Settings', icon: <Icons.Settings /> },
 ];
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────

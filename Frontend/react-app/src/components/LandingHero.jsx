@@ -119,7 +119,7 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
 
           {/* Nav */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            {[
+            {/* {[
               { label: 'Features', action: null },
               { label: 'Explore', action: onOpenAuth },
               { label: 'FAQ', action: null },
@@ -134,7 +134,7 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
                 onMouseLeave={e => { e.currentTarget.style.color = '#444'; e.currentTarget.style.background = 'none'; }}>
                 {label}
               </button>
-            ))}
+            ))} */}
             {/* Login btn */}
             <button onClick={onOpenAuth}
               style={{
@@ -161,10 +161,11 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             </button>
           </nav>
         </div>
-      </header>
+      </header >
 
       {/* ══════════ HERO ══════════ */}
-      <section style={{ ...wrap, paddingTop: 72, paddingBottom: 80 }}>
+      < section style={{ ...wrap, paddingTop: 72, paddingBottom: 80 }
+      }>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
 
           {/* ── Left ── */}
@@ -324,10 +325,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ FEATURE GRID — "YOUR LINKS, HANDLED." ══════════ */}
-      <section style={{ background: '#F0EDEA', padding: '0 0 72px' }}>
+      < section style={{ background: '#F0EDEA', padding: '0 0 72px' }}>
         <div style={wrap}>
           <h2 style={{
             textAlign: 'center', fontWeight: 900, fontSize: 'clamp(28px,4vw,46px)',
@@ -394,10 +395,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             />
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ HOW IT WORKS — 3 STEPS ══════════ */}
-      <section style={{ background: '#fff', borderTop: '2px solid #111', borderBottom: '2px solid #111', padding: '72px 0' }}>
+      < section style={{ background: '#fff', borderTop: '2px solid #111', borderBottom: '2px solid #111', padding: '72px 0' }}>
         <div style={wrap}>
           <h2 style={{
             textAlign: 'center', fontWeight: 900, fontSize: 'clamp(28px,4vw,46px)',
@@ -428,10 +429,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             />
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ SHARING MODES ══════════ */}
-      <section style={{ padding: '72px 0', background: '#F0EDEA' }}>
+      < section style={{ padding: '72px 0', background: '#F0EDEA' }}>
         <div style={wrap}>
           <h2 style={{
             textAlign: 'center', fontWeight: 900, fontSize: 'clamp(28px,4vw,46px)',
@@ -480,10 +481,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ AI SECTION ══════════ */}
-      <section style={{ background: '#fff', borderTop: '2px solid #111', borderBottom: '2px solid #111', padding: '72px 0' }}>
+      < section style={{ background: '#fff', borderTop: '2px solid #111', borderBottom: '2px solid #111', padding: '72px 0' }}>
         <div style={wrap}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }}>
             <div>
@@ -559,10 +560,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ CTA BANNER (light blue — exact Tabi style) ══════════ */}
-      <section style={{ padding: '72px 0', background: '#F0EDEA' }}>
+      < section style={{ padding: '72px 0', background: '#F0EDEA' }}>
         <div style={wrap}>
           <div style={{
             background: '#6BBDE8', border: '2px solid #111', borderRadius: 22,
@@ -605,10 +606,10 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* ══════════ FOOTER ══════════ */}
-      <footer style={{ background: '#F0EDEA', borderTop: '2px solid #111', padding: '28px 0' }}>
+      < footer style={{ background: '#F0EDEA', borderTop: '2px solid #111', padding: '28px 0' }}>
         <div style={{ ...wrap, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 900, fontSize: 17, color: '#111' }}>
             <div style={{ width: 32, height: 32, borderRadius: 9, background: '#111', display: 'grid', placeItems: 'center', border: '2px solid #111' }}>
@@ -633,7 +634,7 @@ export function LandingHero({ onOpenAuth, onOpenDashboard }) {
             © 2025 LinkIt. Built for curious minds.
           </p>
         </div>
-      </footer>
-    </div>
+      </footer >
+    </div >
   );
 }
