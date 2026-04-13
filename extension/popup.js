@@ -3,7 +3,7 @@
  * Collections tab: one-click adds current tab to a collection (no navigation)
  */
 
-import { getApiKey, saveApiKey, clearApiKey, hasApiKey } from './storage.js';
+import { getApiBaseUrl, saveApiBaseUrl, saveApiKey, clearApiKey, hasApiKey } from './storage.js';
 import { getCurrentTab } from './tabs.js';
 import { getFavorites, addCurrentTabToFavorites, getCollections, addCurrentTabToCollection } from './api.js';
 import { formatDate, copyToClipboard, openUrl } from './utils.js';
@@ -19,6 +19,7 @@ const elements = {
   mainContent: $('mainContent'),
   // API Key
   apiKeyInput: $('apiKeyInput'),
+  apiBaseUrlInput: $('apiBaseUrlInput'),
   saveApiKeyBtn: $('saveApiKeyBtn'),
   apiKeyError: $('apiKeyError'),
   // Error
@@ -94,6 +95,7 @@ function showMainContent() {
 async function init() {
   try {
     await loadCurrentTab();
+    elements.apiBaseUrlInput.value = await getApiBaseUrl();
     const hasKey = await hasApiKey();
     if (!hasKey) { showApiKeySetup(); return; }
     await loadData();
@@ -289,8 +291,11 @@ function setupEventListeners() {
   // API key save
   elements.saveApiKeyBtn.addEventListener('click', async () => {
     const key = elements.apiKeyInput.value.trim();
+    const apiBaseUrl = elements.apiBaseUrlInput.value.trim();
     if (!key) { elements.apiKeyError.textContent = 'Please enter an API key'; return; }
+    if (!apiBaseUrl) { elements.apiKeyError.textContent = 'Please enter backend URL'; return; }
     try {
+      await saveApiBaseUrl(apiBaseUrl.replace(/\/+$/, ''));
       await saveApiKey(key);
       elements.apiKeyError.textContent = '';
       await loadData();

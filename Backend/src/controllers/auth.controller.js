@@ -26,7 +26,9 @@ exports.signup = async (req, res) => {
     expiresAt: new Date(Date.now() + 15 * 60 * 1000)
   });
 
-  const verifyUrl = `http://localhost:5500/email-verify.html?token=${rawToken}`;
+  const frontendBaseUrl = process.env.FRONTEND_BASE_URL || 'http://localhost:5173';
+  const publicApiBaseUrl = process.env.PUBLIC_API_BASE_URL || '';
+  const verifyUrl = `${frontendBaseUrl}/email-verify.html?token=${rawToken}&api=${encodeURIComponent(publicApiBaseUrl)}`;
   console.log('📨 Sending verification email to:', email);
 
   await sendEmail.sendMail({

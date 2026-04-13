@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: './src/config/.env' });
+require('dotenv').config();
 
 module.exports = (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');

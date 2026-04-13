@@ -258,13 +258,18 @@ exports.getByToken = async (req, res) => {
     return res.json({ ...col, owner: col.userId, links, hasAccess: true });
   }
 
-  // Check if there's already a pending request from this email
+  // Check the status of the latest access request from this email
   let hasPendingRequest = false;
+  let hasRejectedRequest = false;
   if (requesterEmail) {
-    const pending = await AccessRequest.findOne({
-      collectionId: col._id, requesterEmail, status: 'pending',
-    }).lean();
-    hasPendingRequest = !!pending;
+    const latestReq = await AccessRequest.findOne({
+      collectionId: col._id, requesterEmail,
+    }).sort({ createdAt: -1 }).lean();
+    
+    if (latestReq) {
+      if (latestReq.status === 'pending') hasPendingRequest = true;
+      if (latestReq.status === 'rejected') hasRejectedRequest = true;
+    }
   }
 
   // No access — return collection info + whether they already submitted a request
@@ -275,6 +280,7 @@ exports.getByToken = async (req, res) => {
     owner: col.userId,
     hasAccess: false,
     hasPendingRequest,
+    hasRejectedRequest,
     requesterEmail, // send back so frontend can pre-fill
   });
 };
@@ -352,6 +358,9 @@ exports.rejectRequest = async (req, res) => {
   const col = request.collectionId;
   if (col.userId.toString() !== req.userId.toString())
     return res.status(403).json({ error: 'Not your collection' });
+
+  request.status = 'rejected';
+  await request.save();
 
   // DELETE the notification so it never reappears after refresh
   await Notification.deleteMany({ 'data.requestId': request._id });

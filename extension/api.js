@@ -2,9 +2,7 @@
  * All API fetch calls with Authorization header handling
  */
 
-import { getApiKey } from './storage.js';
-
-const BASE_URL = 'http://localhost:8011';
+import { getApiBaseUrl, getApiKey } from './storage.js';
 
 /**
  * Make an authenticated API request
@@ -14,12 +12,13 @@ const BASE_URL = 'http://localhost:8011';
  */
 async function authenticatedFetch(endpoint, options = {}) {
   const apiKey = await getApiKey();
+  const baseUrl = await getApiBaseUrl();
   
   if (!apiKey) {
     throw new Error('API key not found. Please enter your API key.');
   }
 
-  const url = `${BASE_URL}${endpoint}`;
+  const url = `${baseUrl}${endpoint}`;
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `ApiKey ${apiKey}`,

@@ -77,6 +77,19 @@ export function AuthModal({ open, onClose, onLoginSuccess }) {
   const [error, setError] = useState("");
   const googleBtnRef = useRef(null);
   const googleScriptLoaded = useRef(false);
+  const googleInitialized = useRef(false);
+
+  const renderGoogleButton = () => {
+    if (!window.google || !googleBtnRef.current) return;
+    googleBtnRef.current.innerHTML = "";
+    window.google.accounts.id.renderButton(googleBtnRef.current, {
+      type: "standard",
+      theme: "outline",
+      size: "large",
+      width: googleBtnRef.current.offsetWidth || 340,
+      text: "continue_with",
+    });
+  };
 
   // ── Reset on modal close ──────────────────────────────────────────────────
   useEffect(() => {
@@ -100,19 +113,14 @@ export function AuthModal({ open, onClose, onLoginSuccess }) {
     script.defer = true;
     script.onload = () => {
       googleScriptLoaded.current = true;
-      if (window.google && googleBtnRef.current) {
+      if (window.google && googleBtnRef.current && !googleInitialized.current) {
         window.google.accounts.id.initialize({
           client_id: clientId,
           callback: handleGoogleCredential,
           ux_mode: "popup",
         });
-        window.google.accounts.id.renderButton(googleBtnRef.current, {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          width: googleBtnRef.current.offsetWidth || 340,
-          text: "continue_with",
-        });
+        googleInitialized.current = true;
+        renderGoogleButton();
       }
     };
     document.head.appendChild(script);
@@ -121,20 +129,8 @@ export function AuthModal({ open, onClose, onLoginSuccess }) {
   // Re-render Google button when mode changes
   useEffect(() => {
     if (!open || !googleScriptLoaded.current || !window.google) return;
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
-    if (!clientId || !googleBtnRef.current) return;
-    window.google.accounts.id.initialize({
-      client_id: clientId,
-      callback: handleGoogleCredential,
-      ux_mode: "popup",
-    });
-    window.google.accounts.id.renderButton(googleBtnRef.current, {
-      type: "standard",
-      theme: "outline",
-      size: "large",
-      width: googleBtnRef.current.offsetWidth || 340,
-      text: "continue_with",
-    });
+    if (!googleBtnRef.current) return;
+    renderGoogleButton();
   }, [mode, open]);
 
   // ── Google credential callback ─────────────────────────────────────────────

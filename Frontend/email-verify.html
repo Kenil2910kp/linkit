@@ -74,13 +74,14 @@
   </div>
 
   <script>
-    const API_BASE_URL = "http://localhost:8011";
+    const params = new URLSearchParams(window.location.search);
+    const apiParam = params.get("api");
+    const API_BASE_URL = apiParam || "http://localhost:8011";
 
     const statusEl = document.getElementById("status");
     const actionEl = document.getElementById("action");
 
     async function verifyEmail() {
-      const params = new URLSearchParams(window.location.search);
       const token = params.get("token");
 
       if (!token) {

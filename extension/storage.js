@@ -3,6 +3,7 @@
  */
 
 const STORAGE_KEY = 'linkit_api_key';
+const API_BASE_URL_KEY = 'linkit_api_base_url';
 
 /**
  * Get the stored API key
@@ -52,5 +53,33 @@ export async function clearApiKey() {
 export async function hasApiKey() {
   const apiKey = await getApiKey();
   return apiKey !== null && apiKey.trim() !== '';
+}
+
+/**
+ * Get stored API base URL for the backend
+ * @returns {Promise<string>}
+ */
+export async function getApiBaseUrl() {
+  try {
+    const result = await chrome.storage.sync.get(API_BASE_URL_KEY);
+    return result[API_BASE_URL_KEY] || 'http://localhost:8011';
+  } catch (error) {
+    console.error('Error getting API base URL:', error);
+    return 'http://localhost:8011';
+  }
+}
+
+/**
+ * Save backend API base URL
+ * @param {string} apiBaseUrl - Backend URL
+ * @returns {Promise<void>}
+ */
+export async function saveApiBaseUrl(apiBaseUrl) {
+  try {
+    await chrome.storage.sync.set({ [API_BASE_URL_KEY]: apiBaseUrl });
+  } catch (error) {
+    console.error('Error saving API base URL:', error);
+    throw error;
+  }
 }
 

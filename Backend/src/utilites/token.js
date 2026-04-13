@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config({path: './src/db/.env'});
+require('dotenv').config();
 
-exports.generateToken = (payload) =>
-  jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+exports.generateToken = (payload) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is missing. Set it in environment variables.');
+  }
+
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+};
 

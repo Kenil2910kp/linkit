@@ -20,15 +20,15 @@ You can use any image editor or online tool to create these icons. Place them in
 3. Click "Load unpacked"
 4. Select the `extension` directory
 
-### 3. Configure API Key
+### 3. Configure Backend URL + API Key
 
 1. Click the extension icon in your browser toolbar
-2. Enter your API key when prompted
-3. The extension will save it securely using `chrome.storage.sync`
+2. Enter your backend URL (local or deployed) and API key when prompted
+3. The extension saves both securely in `chrome.storage.sync`
 
 ### 4. Backend Setup
 
-Make sure your backend is running at `http://localhost:8011` with the following endpoints:
+Make sure your configured backend URL points to a server with the following endpoints:
 
 - `GET /extension/favorites` - Get all favorites
 - `POST /extension/add-current-tab` - Add current tab to favorites

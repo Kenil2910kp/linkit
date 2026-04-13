@@ -28,6 +28,5 @@ const collectionSchema = new mongoose.Schema(
 
 collectionSchema.index({ userId: 1, name: 1 }, { unique: true });
 collectionSchema.index({ visibility: 1, createdAt: -1 });
-collectionSchema.index({ sharedToken: 1 });
 
 module.exports = mongoose.model('Collection', collectionSchema);

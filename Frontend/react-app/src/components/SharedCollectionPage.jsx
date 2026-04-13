@@ -185,6 +185,21 @@ export function SharedCollectionPage({ token: shareToken }) {
         );
     }
 
+    // Already has a rejected request
+    if (data.hasRejectedRequest) {
+        return (
+            <div style={S.ctr}>
+                <div style={S.card}>
+                    <div style={{ fontSize: 40, marginBottom: 12 }}>❌</div>
+                    <h2 style={S.h1}>Request denied</h2>
+                    <p style={S.p}>Your request to access <strong>"{data.name}"</strong> was denied by the owner.</p>
+                    <p style={{ ...S.p, marginTop: 6 }}>You cannot access this collection at this time.</p>
+                    <p style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 16 }}>Signed in as <strong>{user.email}</strong></p>
+                </div>
+            </div>
+        );
+    }
+
     // Fresh request form
     return (
         <div style={S.ctr}>

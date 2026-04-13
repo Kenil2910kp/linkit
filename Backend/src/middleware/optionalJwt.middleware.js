@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: './src/config/.env' });
+require('dotenv').config();
 
 // Like jwt.middleware but doesn't reject unauthenticated requests.
 // Sets req.userId and req.userEmail if a valid token is present.
