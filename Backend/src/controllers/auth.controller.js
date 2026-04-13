@@ -12,41 +12,53 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 exports.signup = async (req, res) => {
-  const { email, password, username } = req.body;
-  const user_data = await authService.signup(req.body);
-  await Favorite.create({ userId: user_data.userId });
+  try {
+    const { email } = req.body;
+    const user_data = await authService.signup(req.body);
+    await Favorite.create({ userId: user_data.userId });
 
-  const rawToken = generateRawToken();
-  const tokenHash = await bcrypt.hash(rawToken, 12);
+    const rawToken = generateRawToken();
+    const tokenHash = await bcrypt.hash(rawToken, 12);
 
-  await AuthToken.create({
-    userId: user_data.userId,
-    tokenHash,
-    type: 'EMAIL_VERIFY',
-    expiresAt: new Date(Date.now() + 15 * 60 * 1000)
-  });
+    await AuthToken.create({
+      userId: user_data.userId,
+      tokenHash,
+      type: 'EMAIL_VERIFY',
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000)
+    });
 
-  const frontendBaseUrl = process.env.FRONTEND_BASE_URL || 'http://localhost:5173';
-  const publicApiBaseUrl = process.env.PUBLIC_API_BASE_URL || '';
-  const verifyUrl = `${frontendBaseUrl}/email-verify.html?token=${rawToken}&api=${encodeURIComponent(publicApiBaseUrl)}`;
-  console.log('📨 Sending verification email to:', email);
+    const frontendBaseUrl = process.env.FRONTEND_BASE_URL || 'http://localhost:5173';
+    const publicApiBaseUrl = process.env.PUBLIC_API_BASE_URL || '';
+    const verifyUrl = `${frontendBaseUrl}/email-verify.html?token=${rawToken}&api=${encodeURIComponent(publicApiBaseUrl)}`;
+    console.log('📨 Sending verification email to:', email);
 
-  await sendEmail.sendMail({
-    to: email,
-    subject: 'Verify your email',
-    html: `
-      <p>Click to verify your email:</p>
-      <a href="${verifyUrl}">Verify Email</a>
-      <p>This link expires in 15 minutes.</p>
-    `
-  });
+    await sendEmail.sendMail({
+      to: email,
+      subject: 'Verify your email',
+      html: `
+        <p>Click to verify your email:</p>
+        <a href="${verifyUrl}">Verify Email</a>
+        <p>This link expires in 15 minutes.</p>
+      `
+    });
 
-  res.status(201).json({ message: 'Signup successful. Please verify your email.' });
+    res.status(201).json({ message: 'Signup successful. Please verify your email.' });
+  } catch (err) {
+    const msg = err?.message || 'Signup failed';
+    const status = msg === 'User already exists' ? 409 : 400;
+    res.status(status).json({ error: msg });
+  }
 };
 
 exports.login = async (req, res) => {
-  const data = await authService.login(req.body);
-  res.json(data);
+  try {
+    const data = await authService.login(req.body);
+    res.json(data);
+  } catch (err) {
+    const msg = err?.message || 'Login failed';
+    const status = ['User not found', 'Invalid password', 'Please verify your email before logging in', 'Please login with Google for this account'].includes(msg) ? 401 : 400;
+    res.status(status).json({ error: msg });
+  }
 };
 
 exports.verifyEmail = async (req, res) => {
