@@ -39,6 +39,10 @@ app.use('/favorites',favoriteRoutes);
 app.use('/collections',collectionRoutes);
 
 
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'linkit-backend' });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
