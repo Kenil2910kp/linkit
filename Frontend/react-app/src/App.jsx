@@ -11,10 +11,14 @@ export default function App() {
   const [authOpen, setAuthOpen] = useState(false);
   const [showDashboard, setShowDashboard] = useState(() => !!localStorage.getItem('authToken'));
 
-  // ── Handle /shared/:token route ───────────────────────────────────────────
+  // ── Handle /shared/:token or /#/shared/:token route ──────────────────────
   const pathParts = window.location.pathname.split('/');
-  if (pathParts[1] === 'shared' && pathParts[2]) {
-    return <SharedCollectionPage token={pathParts[2]} />;
+  const hashParts = window.location.hash.replace(/^#/, '').split('/');
+  const sharedToken = (pathParts[1] === 'shared' && pathParts[2])
+    ? pathParts[2]
+    : (hashParts[1] === 'shared' && hashParts[2] ? hashParts[2] : null);
+  if (sharedToken) {
+    return <SharedCollectionPage token={sharedToken} />;
   }
 
   useEffect(() => {

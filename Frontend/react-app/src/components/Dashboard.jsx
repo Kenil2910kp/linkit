@@ -154,7 +154,8 @@ function VisibilitySelector({ collection, token, onUpdate }) {
     const [copied, setCopied] = useState(false);
     const [emailInput, setEmailInput] = useState('');
     const [allowedEmails, setAllowedEmails] = useState(collection.allowedEmails || []);
-    const shareUrl = `${window.location.origin}/shared/${collection.sharedToken}`;
+    // Hash route avoids host-level 404 when SPA rewrites are missing.
+    const shareUrl = `${window.location.origin}/#/shared/${collection.sharedToken}`;
 
     const setVis = async (v) => {
         setSaving(true);
