@@ -8,8 +8,8 @@
     "storage"
   ],
   "host_permissions": [
-    "http://localhost/*",
-    "https://*/*"
+    "https://linkit-30hi.onrender.com/*",
+    "https://www.google.com/*"
   ],
   "action": {
     "default_popup": "popup.html",

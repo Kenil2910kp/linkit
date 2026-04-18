@@ -71,6 +71,16 @@ class State {
     );
   }
 
+  getFilteredCollections() {
+    if (!this.searchQuery.trim()) {
+      return this.collections;
+    }
+    const query = this.searchQuery.toLowerCase();
+    return this.collections.filter((col) =>
+      (col.name || '').toLowerCase().includes(query)
+    );
+  }
+
   getFilteredCollectionLinks() {
     if (!this.selectedCollection) {
       return [];

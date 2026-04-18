@@ -34,21 +34,35 @@ exports.addCurrentTab = async (req, res) => {
 
 exports.getCollections = async (req, res) => {
     const userId = req.userId;
-  
+
     const collections = await Collection.find({
       userId,
       extensionEnabled: true
     })
       .sort({ createdAt: -1 })
       .lean();
-  
-    res.json(
-      collections.map(c => ({
-        _id: c._id,
-        name: c.name,
-        createdAt: c.createdAt
-      }))
+
+    // Count by collectionId only (collections are already scoped to this user).
+    // Use countDocuments() instead of aggregate $match — aggregate does not cast
+    // ObjectIds the same way, which can silently return zero counts.
+    // Match links even if stored collectionId was cast differently (ObjectId vs string).
+    const withCounts = await Promise.all(
+      collections.map(async (c) => {
+        const linkCount = await Link.countDocuments({
+          $expr: {
+            $eq: [{ $toString: '$collectionId' }, String(c._id)]
+          }
+        });
+        return {
+          _id: c._id,
+          name: c.name,
+          createdAt: c.createdAt,
+          linkCount
+        };
+      })
     );
+
+    res.json(withCounts);
   };
 
   exports.addLinkToCollection = async (req, res) => {

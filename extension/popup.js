@@ -3,7 +3,7 @@
  * Collections tab: one-click adds current tab to a collection (no navigation)
  */
 
-import { getApiBaseUrl, saveApiBaseUrl, saveApiKey, clearApiKey, hasApiKey } from './storage.js';
+import { saveApiKey, clearApiKey, hasApiKey } from './storage.js';
 import { getCurrentTab } from './tabs.js';
 import { getFavorites, addCurrentTabToFavorites, getCollections, addCurrentTabToCollection } from './api.js';
 import { formatDate, copyToClipboard, openUrl } from './utils.js';
@@ -19,7 +19,6 @@ const elements = {
   mainContent: $('mainContent'),
   // API Key
   apiKeyInput: $('apiKeyInput'),
-  apiBaseUrlInput: $('apiBaseUrlInput'),
   saveApiKeyBtn: $('saveApiKeyBtn'),
   apiKeyError: $('apiKeyError'),
   // Error
@@ -78,7 +77,7 @@ function showError(msg) {
 }
 
 function showLoading() {
-  show(elements.loadingState);
+  show(elements.loadingState, 'flex');
   hide(elements.errorState);
   hide(elements.apiKeySetup);
   hide(elements.mainContent);
@@ -95,7 +94,6 @@ function showMainContent() {
 async function init() {
   try {
     await loadCurrentTab();
-    elements.apiBaseUrlInput.value = await getApiBaseUrl();
     const hasKey = await hasApiKey();
     if (!hasKey) { showApiKeySetup(); return; }
     await loadData();
@@ -122,6 +120,7 @@ async function loadData() {
     const normalize = (res) => {
       if (Array.isArray(res)) return res;
       if (res?.data && Array.isArray(res.data)) return res.data;
+      if (res?.collections && Array.isArray(res.collections)) return res.collections;
       return [];
     };
 
@@ -214,12 +213,16 @@ async function addToFavorites() {
 
 // ── Collections — ONE CLICK = INSTANT ADD ─────────────────────────────────────
 function renderCollections() {
-  const cols = state.collections;
+  const cols = state.getFilteredCollections();
   if (cols.length === 0) {
+    const emptyMsg =
+      state.collections.length > 0 && state.searchQuery.trim()
+        ? 'No collections match your search.'
+        : 'No collections yet. Create one in the dashboard!';
     elements.collectionsList.innerHTML = `
       <div class="empty-state">
         <span class="empty-icon">📁</span>
-        No collections yet. Create one in the dashboard!
+        ${emptyMsg}
       </div>`;
     return;
   }
@@ -230,7 +233,6 @@ function renderCollections() {
         <div class="collection-name">${escapeHtml(col.name || 'Unnamed')}</div>
         <div class="collection-meta">
           <span>${formatDate(col.createdAt || col.created_at)}</span>
-          <span>${col.linkCount || col.links?.length || 0} links</span>
         </div>
       </div>
       <button class="collection-add-btn" title="Add current tab to this collection">+</button>
@@ -259,13 +261,6 @@ async function addTabToCollection(colId, colName, cardEl) {
   try {
     await addCurrentTabToCollection(colId, currentTab.title, currentTab.url);
     showToast(`✅ Link added to "${colName}"!`);
-
-    // Bump count in state
-    state.setCollections(state.collections.map(c =>
-      (c.id || c._id) === colId
-        ? { ...c, linkCount: (c.linkCount || 0) + 1 }
-        : c
-    ));
   } catch (err) {
     showToast(err.message || 'Failed to add link', 'error');
   } finally {
@@ -291,11 +286,8 @@ function setupEventListeners() {
   // API key save
   elements.saveApiKeyBtn.addEventListener('click', async () => {
     const key = elements.apiKeyInput.value.trim();
-    const apiBaseUrl = elements.apiBaseUrlInput.value.trim();
     if (!key) { elements.apiKeyError.textContent = 'Please enter an API key'; return; }
-    if (!apiBaseUrl) { elements.apiKeyError.textContent = 'Please enter backend URL'; return; }
     try {
-      await saveApiBaseUrl(apiBaseUrl.replace(/\/+$/, ''));
       await saveApiKey(key);
       elements.apiKeyError.textContent = '';
       await loadData();
