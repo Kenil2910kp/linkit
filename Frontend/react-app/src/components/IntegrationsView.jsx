@@ -97,6 +97,16 @@ export function IntegrationsView({ token }) {
                 Use API keys to access LinkIt from external tools, browser extensions, or scripts.
                 <strong> The key is shown only once</strong> — copy it immediately after creation.
             </p>
+            <div className="integrations-actions">
+                <a
+                    href="https://chromewebstore.google.com/detail/koleabcecncmoebpgfjnadknpllfimdc?utm_source=item-share-cb"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary"
+                >
+                    Download Chrome Extension
+                </a>
+            </div>
 
             {/* Create form */}
             <div className="fav-add-card">

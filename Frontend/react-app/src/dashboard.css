@@ -818,6 +818,10 @@
   font-weight: 500;
 }
 
+.integrations-actions {
+  margin-bottom: 18px;
+}
+
 .api-create-row {
   display: flex;
   gap: 10px;
