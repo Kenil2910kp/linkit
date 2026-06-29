@@ -136,8 +136,7 @@ https://linkit-easy.vercel.app/
 
 ## 🧩 Chrome Extension
 
-Available on the Chrome Web Store.
-
+https://chromewebstore.google.com/detail/linkit/koleabcecncmoebpgfjnadknpllfimdc?utm_source=item-share-cb
 ---
 
 ## 🤝 Contributing
